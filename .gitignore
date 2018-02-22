@@ -1,0 +1,4 @@
+*.py[cod]
+*.ini
+/.idea/*
+__pycache__/*
