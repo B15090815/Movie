@@ -1,0 +1,256 @@
+<!--这句添加在html文件的最上面  -->
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <title>vip解析</title>
+    <!--Microsoft CDN:-->
+    <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">-->
+    <!-- Latest compiled and minified CSS -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <!-- Latest compiled and minified JavaScript -->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPsearchTxa" crossorigin="anonymous"></script>-->
+
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css'  %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'  %}">
+	<script src="{% static 'jquery-3.2.1.min.js' %} "></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %} "></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+
+    <script type="text/javascript">
+		$(document).ready(function(){
+	        $.ajaxSetup({
+	            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+	        });
+
+
+	        function bindTap(){
+		        $("button").click(function(){
+		        	var selected = $("#parse").find("option:selected");
+		        	// var selectbox = $("#parse");
+	        		var way = selected.val();
+  	        		var url = way + 'http:' + this.getAttribute('link');
+	        		// console.log(typeof selected.text());
+	        		if(selected.text() == "2"){
+	        			// var suffix = selected.attr("suffix");
+	        			url = url + suffix;
+	        		}
+	        		window.open(url);
+	        	});
+	        }
+
+
+    		$("#search").click(function(){
+    			var name = $("#seacrhFor").val();
+    			if(Boolean(name)){
+    				$.ajax({
+    					type:'post',
+						datatype:'json',
+						data:{q:name},
+						url:'',
+						//
+						success:function(data){
+							var tv = data['tv'];
+							var mv = data['movie'];
+							var list = document.getElementById("list");
+							list.innerHTML = "";
+							var link;
+							var item;
+							for(var i=0;i<tv.length;i++){
+								item = tv[i];
+								var result = document.createElement("div");
+								result.className = 'result';
+								var header = document.createElement("div");
+								var str= '<img src="'+ item.img + '"/>'	+ '<h2>' + item.title + '</h2>';
+								header.innerHTML = str;
+
+								var source = document.createElement("div");
+								source.className = 'source';
+								link = item.links;
+								for(var j=0;j<link.length;j++){
+									var btn = document.createElement('button');
+									btn.className = 'btn btn-info link';
+									// btn.setAttribute('role', 'button');
+									// btn.setAttribute('target', 'blank');
+									btn.setAttribute('link', link[j]);
+									btn.innerHTML = j+1;
+									// btn.href = link[j];
+									source.appendChild(btn);
+								}
+								result.appendChild(header);
+								result.appendChild(source);
+								list.appendChild(result);
+							}
+
+							for(var i=0;i<mv.length;i++){
+								item = mv[i];
+								var result = document.createElement("div");
+								result.className = 'result';
+								var header = document.createElement("div");
+								var str= '<img src="'+ item.img + '"/>'	+ '<h2>' + item.title + '</h2>';
+								header.innerHTML = str;
+
+								var source = document.createElement("div");
+								source.className = 'source';
+								link = item.links;
+								for(var j=0;j<link.length;j++){
+									var btn = document.createElement('button');
+									btn.className = 'btn btn-info link';
+									// btn.setAttribute('role', 'button');
+									btn.setAttribute('link', link[j]);
+									btn.innerHTML = j+1;
+									// btn.href = link[j];
+									source.appendChild(btn);
+								}
+								result.appendChild(header);
+								result.appendChild(source);
+								list.appendChild(result);
+							}
+
+							bindTap();
+						}
+    				});
+    			}
+    		});
+
+		});
+
+
+	</script>
+
+
+    <style type="text/css">
+        div.searcher {padding: 30px 0}
+        form {
+          position: relative;
+          width: 300px;
+          margin: 0 auto;
+        }
+        .search {background: #7BA7AB;}
+        .search:after {content:""; clear:both; display:table}
+        .search form {
+          width: auto;
+          float: right;
+          margin-right: 30%;
+        }
+        .search input {
+          width: 300px;
+          height: 42px;
+          padding-left: 15px;
+          border-radius: 42px;
+          border: 2px solid #324b4e;
+          background: #F9F0DA;
+          outline: none;
+          position: relative;
+          transition: .3s linear;
+        }
+        .search input:focus {
+          width: 350px;
+        }
+        .search button {
+          width: 42px;
+          height: 42px;
+          background: none;
+          border: none;
+          position: absolute;
+          top: -2px;
+          right: 0;
+        }
+        .search button:before{
+          content: "\f002";
+          font-family: FontAwesome;
+          color: #324b4e;
+        }
+    </style>
+
+   <style type="text/css">
+   		img{
+   			float: left;
+   			margin-right:10px;
+   		}
+
+   		h2{
+   			margin-bottom: 25px;
+   		}
+   		.source{
+   			clear: left;
+   			padding: 0;
+   			width: 100%;
+   			text-align: left;
+   			margin-top: 30px;
+   		}
+   		.link{
+   			text-align: center;
+   			padding: 0;
+   			margin: 5px;
+   			width: 60px;
+   			height: 30px;
+   		}
+   		.result{
+   			width: 100%;
+   			margin:15px 0 35px 0;
+   			padding: 0;
+   		}
+   </style>
+</head>
+<body>
+	<div class="container" style="padding: 80px">
+		<div style="text-align: center;margin:0 0 25px 0">
+			<h4>输入需邀查询的视频</h4>
+		</div>
+        <div class="searcher search">
+            <form method="get">
+              <input type="text" placeholder="搜索从这里开始...">
+              <button type="submit"  id="search"></button>
+            </form>
+        </div>
+        <!--<div class="search d1">-->
+            <!--<form>-->
+              <!--<input type="text" placeholder="搜索从这里开始...">-->
+              <!--<button type="submit"></button>-->
+            <!--</form>-->
+        <!--</div>-->
+        <!--<form role="form" method="POST" class="form-horizontal">-->
+          <!--<div  class="form-group">-->
+            <!--{% csrf_token %}-->
+            <!--<input type="text" class="form-control" id="name" placeholder="请输入查询的影片">-->
+            <!--<input type="submit" class="form-control" value="搜索" >-->
+          <!--</div>-->
+        <!--</form>-->
+
+        <!--<form role="form">-->
+            <!--<div class="input-group">-->
+            <!--<input type="text" class="form-control" id="seacrhFor">-->
+            <!--<span class="input-group-addon" id="search" style="cursor:pointer"> 搜索</span>-->
+        <!--</div>-->
+        <!--</form>-->
+
+
+        <div>
+	        <form role="form" style="margin-top:25px ">
+			    <div class="form-group">
+				    <label style="font-size: 1.3em">选择解析线路</label>
+				    <select class="form-control" id="parse">
+					  <option value="https://tyhttps.duapp.com/1116/222.php?url=">1</option>
+					  <option value="http://tv.jianulife.cn/m/?a=" suffix="&b=小白杨内部群视频站&c=淘宝天猫一折购区&d=http://www.woaini88.com/1">2</option>
+<!-- 					  <option value="http://www.82190555.com/index/qqvod.php?url=">3</option>
+					  <option value="http://000o.cc/jx/ty.php?url=">4</option>
+					  <option value="http://jiexi.92fz.cn/player/vip.php?url=">5</option>
+					  <option value="https://api.flvsp.com/?url=">6</option>
+					  <option value="http://vip.jlsprh.com/index.php?url=">7</option> -->
+				    </select>
+			    </div>
+			</form>
+        </div>
+        <div id="list">
+        </div>
+
+        <!-- <button id="test"></button> -->
+
+	</div>
+</body>
+</html>
