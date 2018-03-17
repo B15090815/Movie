@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Items(models.Model):
-    name = models.CharField(max_length=30, default='')
+    name = models.CharField(max_length=60, default='')
     img = models.CharField(max_length=200, default='')
     tag = models.CharField(max_length=80, default='')
     pubdate = models.CharField(max_length=12, default='2017-1-1')
@@ -15,5 +15,5 @@ class Items(models.Model):
 
 
 class Links(models.Model):
-    link = models.CharField(max_length=800, default='')
+    link = models.CharField(max_length=1500, default='')
     item = models.ForeignKey(Items, related_name='link', on_delete=models.CASCADE)
