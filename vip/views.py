@@ -16,12 +16,6 @@ def index(request):
 def searcher(request):
     name = request.POST.get('q', '')
     link = Links.objects.select_related().filter(item__name__contains=name).values_list()
-    # item = Items.objects.filter(name__contains=name)
-    # if item.exists():
-    #     pass
-
-    # ip = request.META['REMOTE_ADDR']
-    # proxies = {'http':'http://'+ip,'https':'https://'+ip}
     url = 'http://www.soku.com/search_video/q_' + name
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0'
     headers = {'User-Agent': user_agent}
@@ -73,3 +67,8 @@ def searcher(request):
     return HttpResponse(json.dumps({'tv': tv_source, 'movie': mv_source}), content_type="application/json")
 
 
+def parse(request):
+    return render(request, 'vip/parse.html')
+
+def addparse(request):
+    pass

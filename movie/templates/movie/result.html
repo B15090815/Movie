@@ -1,0 +1,46 @@
+{% extends 'movie/base.html '%}
+{% block extendcss %}
+<style>
+    h2 {
+        color: red;
+    }
+</style>
+{% endblock %}
+{% block content %} 
+<div style="margin-top:100px;"></div>
+<div class="container">
+    <div class="row" id="case">
+        {% if MovieList %}
+            {% for movie in MovieList %}
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">
+                <div class="thumbnail">
+                    <div style="height:380px;">
+                        <img src="{{ movie.img }}" height="auto" width="93%" alt="" style="vertical-align:middle;">
+                    </div>
+                    <div>
+                        <h4 style="margin:0">
+                            <a href="/detial/{{movie.id}}">{{movie.name}}</a>
+                        </h4>
+                        {% if movie.tag %}
+                        <p style="margin:0">类型:{{movie.tag}}</p>
+                        {% else %}
+                        <p style="margin:0">电视剧/综艺</p>
+                        {% endif %}
+                        <p style="margin:0">更新日期：{{movie.pubdate}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                {% if Nokey %}
+                <h2>没有关键词</h2>
+                {% else %}
+                <h2>你要的资源走失了!</h2>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

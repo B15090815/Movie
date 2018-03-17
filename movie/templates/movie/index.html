@@ -1,0 +1,215 @@
+{% extends 'movie/base.html '%}
+{% load staticfiles %}
+{% block extendjs %}
+<script>
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i].trim();
+			if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+		}
+		return "";
+	}
+
+	function _getpage(url){
+		$.get(url,function(data,status){
+			var show = $("#case");
+			var content = '';
+			for(var i=0;i<data.length;i++){
+				content +='<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">' + '<div class="thumbnail">' +
+				'<div style="height:380px;">' + '<img src="' + data[i].img + '" height="auto" width="93%" alt="" style="vertical-align:middle;">' +
+				'</div>' + '<div>' + '<h4 style = "margin:0" >' + '<a href="/detial/' + data[i].id +'">' + data[i].name + '</a>' + '</h4>';
+				if(data[i].tag != ''){
+					content += '<p style="margin:0">类型:'+ data[i].tag +'</p>';
+				}else{
+					content += '<p style="margin:0">电视剧/综艺</p>';
+				}
+				content += '<p style="margin:0">更新日期：' + data[i].pubdate + '</p>' + '</div >' + '</div >' + '</div >';
+			}
+			show.html(content);
+			$('html,body').animate({ scrollTop: '300px' }, 800);
+		});
+	}
+
+	function getpage(){
+		var pagenum = getCookie("pageNum");
+		var self = $(event.srcElement);
+		var num = self.text();
+		if(pagenum != num){
+			var url = '/page/' + num;
+			_getpage(url);
+			// $('body').animate({ scrollTop: 50 }, 500);
+			
+		}
+		// self.parent().attr("style","background-color: rgb(168, 168, 168)");
+	}
+	$(document).ready(function () {
+		// $.ajaxSetup({
+		// 	data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
+		// });
+
+		$("#pre").click(function () {
+			var pageNum = getCookie("pageNum");
+			if(pageNum != ""){
+				pageNum = parseInt(pageNum);
+				if(pageNum == 1){
+					$(this).attr("href", "JavaScript:void(0);");
+					alert("当前是第一页");
+				}else{
+					if((pageNum % 5) == 1){
+						var li = $('.num');
+						var j = 0;
+						for(var i=0;i<li.length;i++){
+							j = pageNum - 5 + i;
+							$(li[i]).text(j);
+						}
+					}
+					var url = '/page/' + (pageNum - 1);
+					_getpage(url);
+				}
+			}
+		})
+
+		$("#next").click(function(){
+			var pageNum = getCookie("pageNum");
+			var endpage = getCookie("endPage");
+			if(pageNum != ""){
+				pageNum = parseInt(pageNum);
+				endpage = parseInt(endpage);
+				if(pageNum == endpage){
+					$(this).attr("href", "JavaScript:void(0);");
+					alert("当前是最后一页");
+				}else{
+					if((pageNum % 5) == 0){
+						var li = $('.num');
+						for (var i = 0; i < li.length; i++) {
+							j = pageNum + i + 1;
+							$(li[i]).text(j);
+						}
+					}
+					var url = '/page/' + (pageNum + 1);
+					_getpage(url);
+				}
+
+			}
+		})	
+	}
+);
+</script>
+{% endblock %}
+{% block extendcss %}
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
+{% endblock %}
+
+{% block Carousel %} 
+	<div id="myCarousel" class="carousel slide">
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner">
+			<div class="item active" style="background:#223240">
+				<img src="{% static 'img/slide1.png' %}" alt="第一张">
+			</div>
+			<div class="item" style="background:#F5E4DC;">
+				<img src="{% static 'img/slide2.png' %}" alt="第二张">
+			</div>
+			<div class="item" style="background:#DE2A2D;">
+				<img src="{% static 'img/slide3.png' %}" alt="第三张">
+			</div>
+		</div>
+		<a href="#myCarousel" data-slide="prev" class="carousel-control left">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+		</a>
+		<a href="#myCarousel" data-slide="next" class="carousel-control right">
+			<span class="glyphicon glyphicon-chevron-right"></span>
+		</a>
+	</div>
+{% endblock %}
+
+
+{% block content %}
+	<div style="margin:20px 0;">
+		<div class="container">
+			<div class="row">
+				<h1>标签云</h1>
+				<!-- <div class="col-lg-12 col-xs-12"> -->
+				<div style="border: solid red 1px;padding: 20px">
+					<button class="btn-info btn-lg">国内电影</button>
+					<button class="btn-info btn-lg">国内电影</button>
+					<button class="btn-info btn-lg">国内电影</button>
+					<button class="btn-info btn-lg">国内电影</button>
+				</div>
+				<!-- </div> -->
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="container">
+			<h1>最近更新</h1>
+			<div class="row" style="display: none;">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div style="height: 200px;border: solid red 1px">
+						<p>hvifdshguihsfduihngudifs</p>
+					</div>
+				</div>
+			</div>
+			<div class="row" id="case">
+				{% for movie in MovieList %}
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">
+					<div class="thumbnail">
+						<div style="height:380px;">
+							<img src="{{ movie.img }}" height="auto" width="93%" alt="" style="vertical-align:middle;">
+						</div>
+						<div>
+							<h4 style="margin:0">
+								<a href="/detial/{{movie.id}}">{{movie.name}}</a>
+							</h4>
+							{% if movie.tag %}
+							<p style="margin:0">类型:{{movie.tag}}</p>
+							{% else %}
+							<p style="margin:0">电视剧/综艺</p>
+							{% endif %}
+							<p style="margin:0">更新日期：{{movie.pubdate}}</p>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	
+	
+	<div style="text-align: center;">
+		<ul class="pagination pagination-lg">
+			<li >
+				<a  id="pre" style="cursor:pointer">&laquo;&nbsp;上一页</a>
+			</li>
+			<li>
+				<a  class="num" onclick="getpage()">1</a>
+			</li>
+			<li>
+				<a  class="num" onclick="getpage()">2</a>
+			</li>
+			<li>
+				<a  class="num" onclick="getpage()">3</a>
+			</li>
+			<li>
+				<a  class="num" onclick="getpage()">4</a>
+			</li>
+			<li>
+				<a  class="num" onclick="getpage()">5</a>
+			</li>
+			<li>
+				<a id="next">下一页&nbsp;&raquo;</a>
+			</li>
+		</ul>
+	</div>
+{% endblock %}

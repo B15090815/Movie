@@ -1,0 +1,83 @@
+{% extends 'movie/base.html '%}
+{% load staticfiles %}
+{% block extendcss %}
+<style>
+    @media screen and (max-width: 500px) {
+        iframe {
+            height: 320px;
+        }
+    }
+</style>
+{% endblock%}
+
+{% block extendjs %}
+<script>
+    // var parseWay = {{parseWay}};
+    function play() {
+        var url = $("#link").val();
+        var urlPatt = /http.*html/;
+        var self = $(event.srcElement);
+        if(urlPatt.test(url)){
+            url = urlPatt.exec(url)[0];
+            var selected = $("#parse").find("option:selected");
+            var way = selected.val();
+            url = way.replace("replacement",url);
+
+            var f = document.getElementById("me"); 
+            f.setAttribute("src", url);
+                // self.attr("data-play","y");
+
+
+        }else{
+            alert("输入的链接错误！");
+        }
+        // console.log(play)
+    }
+
+</script>
+{% endblock%}
+
+
+
+{% block content %}
+<div style="margin-top:100px;"></div>
+<div class="container">
+    <div class="row" id="case">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <form role="form" style="margin-top:25px ">
+                <div class="form-group">
+                    <label style="font-size: 1.3em">选择解析线路</label>
+                    <select class="form-control" id="parse">
+                        <option value="http://www.1717yun.com/jx/ty.php?url=replacement">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </form>
+
+            <iframe id="me" src="{% static 'html/default.html' %}" width="100%" height="600px" frameborder="0" allowfullscreen="true" allowtransparency="true">
+
+            </iframe>
+        </div>
+    </div>
+    <div style="margin-top:20px;"></div>
+    <div class="row" id="case">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <input id="link" type="text" class="form-control input-group-lg" placeholder="输入解析链接" style="height:3em">
+        </div>
+    </div>
+
+    <div class="row" id="case">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-info btn-lg btn-block" onclick="play()" data-play="n">点击播放</button>
+        </div>
+    </div>
+
+    <div style="margin-bottom:20px;"></div>
+
+</div>
+
+{% endblock%}

@@ -1,0 +1,72 @@
+{% extends 'movie/base.html '%}
+{% block extendcss %}
+<style>
+	p {
+		font-size: 1.3em; 
+	}
+	img {
+		width: 95%;
+		height: auto;
+	}
+	#source {
+		text-align: left;
+		font-size: 1.2em;
+	}
+
+	input {
+		width: 80%;
+	}
+	ul > li {
+		margin: 5px auto;
+	}
+</style>
+{% endblock %}
+
+{% block extendjs %}
+<script>
+	function getSource(){
+		var self = $(event.srcElement);
+		self.prev().select();
+		document.execCommand("Copy");
+	}
+</script>
+{% endblock %}
+
+{% block content %} 
+<div style="margin-top:100px;"></div>
+<div class="container">
+	<div class="row" id="case">
+		<div class="col-lg-2 col-md-2"></div>
+		<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+			{% if item %}
+			<div>
+				<img src="{{item.img}}" alt="图片走失了...">
+			</div>
+			
+			<div style="margin-top:30px">
+				<h2>{{item.name}}</h2>
+				{% if item.tag %}
+				<p><strong>类型:{{item.tag}}</strong></p>
+				{% else %}
+				<p>
+					<strong>类型:电视剧/综艺</strong>
+				</p>
+				{% endif %}
+			</div>
+			 
+			<div id="source">
+				<!-- <p>电影天堂</p> -->
+				<ul >
+					{% for i in link %}
+					<li>
+						<input type="text" value="{{i}}" readonly="readonly">&nbsp;&nbsp;<button onclick="getSource()">点击复制</button>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			 {% endif %}
+		</div>
+	</div>
+</div>
+<div style="margin-top:50px;"></div>
+{% endblock %}
