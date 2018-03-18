@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
+import re
 @csrf_exempt
 def wechat(request):
     if request.method == "GET":
@@ -44,15 +45,19 @@ def autoreply(request):
         CreateTime = xmlData.find('CreateTime').text
         MsgType = xmlData.find('MsgType').text
         MsgId = xmlData.find('MsgId').text
+        Msg = xmlData.find('Content').text
 
         toUser = FromUserName
         fromUser = ToUserName
 
         if msg_type == 'text':
-            content = "您好,欢迎来到Python大学习!希望我们可以一起进步!"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-
+            pat = re.compile(r'^http.*html')
+            link = pat.search(Msg)
+            if link != None:
+                content = "47.100.59.209/vip/parse?url=" + link
+                replyMsg = TextMsg(toUser, fromUser, content)
+                return replyMsg.send()
+            return ""
         elif msg_type == 'image':
             content = "图片已收到,谢谢"
             replyMsg = TextMsg(toUser, fromUser, content)
