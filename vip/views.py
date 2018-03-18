@@ -68,7 +68,9 @@ def searcher(request):
 
 
 def parse(request):
-    return render(request, 'vip/parse.html')
+    if request.method == "GET":
+        url = request.GET.get('url')
+    return render(request, 'vip/parse.html',{'url':url})
 
-def addparse(request):
-    pass
+# def addparse(request):
+#     url = request.GET.get()

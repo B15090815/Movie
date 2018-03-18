@@ -61,6 +61,9 @@
             </iframe>
         </div>
     </div>
+    {% if url %}
+    <input id="link" type="hidden" value="{{url}}">
+    {% else %}
     <div style="margin-top:20px;"></div>
     <div class="row" id="case">
         <div class="col-lg-1 col-md-1"></div>
@@ -68,6 +71,7 @@
             <input id="link" type="text" class="form-control input-group-lg" placeholder="输入解析链接" style="height:3em">
         </div>
     </div>
+    {% endif %}
 
     <div class="row" id="case">
         <div class="col-lg-1 col-md-1"></div>
