@@ -25,7 +25,7 @@ def index(request):
     #     pageNum = 1
     movieNum = Items.objects.count()
     endPage = math.ceil(movieNum / 20)
-    movieList = Items.objects.all().order_by("-id")[:20]
+    movieList = Items.objects.all().order_by("-id").values('id','name','pubdate')[:20]
     response = render(request, 'movie/index.html', {"MovieList": movieList})
     response.set_cookie('pageNum', 1)
     response.set_cookie('endPage', endPage)
@@ -38,7 +38,8 @@ def getPage(request,num):
     end = start + 20
     if end > movieNum:
         end = movieNum
-    movieObject = Items.objects.order_by("-id").all().values()[start:end]
+    movieObject = Items.objects.order_by("-id").all().values(
+        'id', 'name', 'pubdate')[start:end]
     movieList = list(movieObject)
     response = HttpResponse(
         json.dumps(movieList), content_type="application/json")
@@ -72,4 +73,3 @@ def search(request):
             "Nokey": 1
         })
     return response
-

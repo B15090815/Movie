@@ -14,19 +14,24 @@
 
 	function _getpage(url){
 		$.get(url,function(data,status){
-			var show = $("#case");
+			var show = $("#movieList");
 			var content = '';
 			for(var i=0;i<data.length;i++){
-				content +='<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">' + '<div class="thumbnail">' +
-				'<div style="height:380px;">' + '<img src="' + data[i].img + '" height="auto" width="93%" alt="" style="vertical-align:middle;">' +
-				'</div>' + '<div>' + '<h4 style = "margin:0" >' + '<a href="/detial/' + data[i].id +'">' + data[i].name + '</a>' + '</h4>';
-				if(data[i].tag != ''){
-					content += '<p style="margin:0">类型:'+ data[i].tag +'</p>';
-				}else{
-					content += '<p style="margin:0">电视剧/综艺</p>';
-				}
-				content += '<p style="margin:0">更新日期：' + data[i].pubdate + '</p>' + '</div >' + '</div >' + '</div >';
+				content += '<div class="col-md-6 col-sm-12">\
+					<h4><a href="/detial/' + data[i].id + '">'+ data[i].name +'</a> <span style="float:right">'+ data[i].pubdate +'</span></h4>\
+					</div >';
 			}
+			// for(var i=0;i<data.length;i++){
+			// 	content +='<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">' + '<div class="thumbnail">' +
+			// 	'<div style="height:380px;">' + '<img src="' + data[i].img + '" height="auto" width="93%" alt="" style="vertical-align:middle;">' +
+			// 	'</div>' + '<div>' + '<h4 style = "margin:0" >' + '<a href="/detial/' + data[i].id +'">' + data[i].name + '</a>' + '</h4>';
+			// 	if(data[i].tag != ''){
+			// 		content += '<p style="margin:0">类型:'+ data[i].tag +'</p>';
+			// 	}else{
+			// 		content += '<p style="margin:0">电视剧/综艺</p>';
+			// 	}
+			// 	content += '<p style="margin:0">更新日期：' + data[i].pubdate + '</p>' + '</div >' + '</div >' + '</div >';
+			// }
 			show.html(content);
 			$('html,body').animate({ scrollTop: '300px' }, 800);
 		});
@@ -103,6 +108,9 @@
 	a {
 		cursor: pointer;
 	}
+	hr {
+		color:#DE2A2D;
+	}
 </style>
 {% endblock %}
 
@@ -153,7 +161,7 @@
 
 	<div>
 		<div class="container">
-			<h1>最近更新</h1>
+			<h2>最近更新</h2>
 			<div class="row" style="display: none;">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div style="height: 200px;border: solid red 1px">
@@ -161,34 +169,58 @@
 					</div>
 				</div>
 			</div>
-			<div class="row" id="case">
+			<div class="row" id="movieList">
 				{% for movie in MovieList %}
-				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">
-					<div class="thumbnail">
-						<div style="height:380px;">
-							<img src="{{ movie.img }}" height="auto" width="93%" alt="" style="vertical-align:middle;">
-						</div>
-						<div>
-							<h4 style="margin:0">
-								<a href="/detial/{{movie.id}}">{{movie.name}}</a>
-							</h4>
-							{% if movie.tag %}
-							<p style="margin:0">类型:{{movie.tag}}</p>
-							{% else %}
-							<p style="margin:0">电视剧/综艺</p>
-							{% endif %}
-							<p style="margin:0">更新日期：{{movie.pubdate}}</p>
-						</div>
+					<div class="col-md-6 col-sm-12">
+						<h4><a href="/detial/{{movie.id}}">{{movie.name}}</a><span style="float:right">{{movie.pubdate}}</span></h4>
 					</div>
-				</div>
 				{% endfor %}
 			</div>
+
+				<hr>
+				<h2>热门电影</h2>
+				<div class="row">
+					{% for movie in MovieList %}
+					<div class="col-md-6 col-sm-12">
+						<h4>
+							<a href="/detial/{{movie.id}}">{{movie.name}}</a>
+							<span style="float:right">{{movie.pubdate}}</span>
+						</h4>
+					</div>
+					{% endfor %}
+				</div>
+		<hr>
+		<h2>喜剧</h2>
+		<div class="row" >
+			{% for movie in MovieList %}
+			<div class="col-md-6 col-sm-12">
+				<h4>
+					<a href="/detial/{{movie.id}}">{{movie.name}}</a>
+					<span style="float:right">{{movie.pubdate}}</span>
+				</h4>
+			</div>
+			{% endfor %}
+		</div>
+		<hr>
+		<h2>科幻</h2>
+		<div class="row" >
+			{% for movie in MovieList %}
+			<div class="col-md-6 col-sm-12">
+				<h4>
+					<a href="/detial/{{movie.id}}">{{movie.name}}</a>
+					<span style="float:right">{{movie.pubdate}}</span>
+				</h4>
+			</div>
+			{% endfor %}
+		</div>
+
+
 		</div>
 	</div>
 	
 	
 	<div style="text-align: center;">
-		<ul class="pagination pagination-lg">
+		<ul class="pagination">
 			<li >
 				<a  id="pre" style="cursor:pointer">&laquo;&nbsp;上一页</a>
 			</li>
@@ -213,3 +245,25 @@
 		</ul>
 	</div>
 {% endblock %}
+
+
+<!-- {% for movie in MovieList %}
+				<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:500px">
+					<div class="thumbnail">
+						<div style="height:380px;">
+							<img src="{{ movie.img }}" height="auto" width="93%" alt="" style="vertical-align:middle;">
+						</div>
+						<div>
+							<h4 style="margin:0">
+								<a href="/detial/{{movie.id}}">{{movie.name}}</a>
+							</h4>
+							{% if movie.tag %}
+							<p style="margin:0">类型:{{movie.tag}}</p>
+							{% else %}
+							<p style="margin:0">电视剧/综艺</p>
+							{% endif %}
+							<p style="margin:0">更新日期：{{movie.pubdate}}</p>
+						</div>
+					</div>
+				</div>
+				{% endfor %} -->
