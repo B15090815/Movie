@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>被监护人员信息录入</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
+    <script src="{% static 'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+    <style>
+        .addmember{
+            margin-top: 360px;
+            margin-left:20%; 
+            
+        }
+        .addmember input{
+            opacity: 0.85;
+        }
+        @media(max-width: 800px){
+            .addmember{
+                margin-top: 30px;
+                margin-left:10px; 
+                margin-right:10px; 
+                /* margin-left:5%;  */
+                
+            }
+        }
+        .backgroundpic{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top:0;
+            background-image: url("{% static 'image/back.jpg' %}");
+            background-repeat: no-repeat;
+            opacity: 0.60;
+            z-index: -1;
+        }
+        .return{
+            margin: 30px auto auto 100px;
+            font-size: 1.8em;
+        }
+    </style>
+
+    <script>
+        $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+        })
+        function AddMember(){
+            var name = $("input[name='name']").val();
+            var gender = $("input[name='gender']:checked").val();
+            var birthdate = $("input[name='birthdate']").val();
+            var height = $("input[name='height']").val(); 
+            var weight = $("input[name='weight']").val(); 
+            $.ajax({
+                url:"{%url 'addmember'%}",
+                type:"post",
+                data:{name: name, gender: gender, birthdate: birthdate, height: height, weight: weight},
+                success:function(response){
+                    if(response == "1"){
+                        alert("添加成员成功！");
+                    }else if(response=="0")
+                        alert("添加成员出错！");
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <div class="backgroundpic"></div>
+    <div class="return">
+        <a href="/">首页</a>
+    </div>
+    <div class="addmember">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">姓名</label>
+                <div class="col-sm-3 col-md-3">
+                    <input type="text" class="form-control" placeholder="请输入名字" name="name" required>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">出生日期</label>
+                <div class="col-sm-3 col-md-3">
+                    <div class="input-group date form_date" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" type="text" required name="birthdate" placeholder="出生日期">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </span>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">性别</label>
+                <div class="col-sm-3 col-md-3">
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="男" required>男
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="女" required>女
+                    </label>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">身高</label>
+                <div class="col-sm-3 col-md-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入身高" name="height" required>
+                        <span class="input-group-addon">cm</span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label class="col-sm-3 col-md-3 control-label">体重</label>
+                <div class="col-sm-3 col-md-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入体重" name="weight" required>
+                        <span class="input-group-addon">kg</span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button  class="btn btn-default" onclick="AddMember()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+<script>
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+</script>
+</body>
+</html>

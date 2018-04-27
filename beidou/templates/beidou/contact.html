@@ -1,0 +1,120 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en-gb">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Member List</title>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/flexslider.css' %}" rel="stylesheet" >
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/queries.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'js/default-value.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/reveal.js' %}"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <style type="text/css">
+    .wf-loading html,
+    .wf-loading h2 {
+      visibility: hidden;
+    }
+    </style>
+        
+    </head>
+      <body id="top">
+        <header id="home">
+         <section class="inner-hero about">
+            <div class="container">
+              <div class="row">
+                <div class="col-xs-8">
+                  <a href="/" class="logo">Member List</a>
+                </div>
+                <div class="col-xs-4 text-right navicon">
+                  <a class="nav_slide_button" href="/" style="color:white;font-size:1.5em;margin-right:30px;">首页</a>
+                  <a class="nav_slide_button" href="javascript:void(0)" style="color:white;font-size:1.5em;">欢迎你,{{user.username}}</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </header>
+
+        <section class="features section-padding" id="intro">
+          <div class="container">
+            <div class="row">
+                <div class="icon" style="margin: -40px auto 20px;">
+                  <i class="fa fa-paper-plane-o"></i>
+                </div>
+              <div class="col-md-12">
+                <h1 class="inner-title">在下面我们可以看到被监测成员的总列表</h1>
+                <h2 class="inner-title">如果想查看被监测成员的具体信息和各种数据参数，点击被监测成员的姓名即可。</h2>
+              </div>
+              <div class="col-md-6 col-md-offset-3 text-center">
+        <p>Below we can see the total list of members to be monitored, if you want to see the monitored members of the specific information and a variety of data parameters, click on the monitored members of the name can be.</p>
+              </div> 
+            </div>
+          </div>
+        </section>
+
+        <section class="intro text-center section-padding" id="features">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+              <h1 class="inner-title">成员列表</h1>
+              <h3 class="inner-title">Member List:</h3>
+                <ul class="bibliography">
+                  {% for m in member %}
+                    <li>监测者NO.{{forloop.counter}}：{{m.name}}
+                      <a href="/memberdetail/{{m.id}}">查看详细信息</a>
+                    </li>
+                  {% empty %}
+                  <li><a href="{%url 'toaddmember'%}"><h2>目前还未添加被监测人员(点击可添加成员)</h2></a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>  
+
+        <footer>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <p class="copy">&copy 2018 · Crx · All Rights Reserved</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+        
+        <script src="../ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+        <script type="text/javascript" src="{% static 'js/jquery.jigowatt.js' %}"></script>
+
+        <script src="{% static 'js/waypoints.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/jquery.flexslider.js' %}"></script>
+        <script src="{% static 'js/modernizr.js' %}"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','../www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-42899893-1', 'mikeinghamdesign.com');
+      ga('send', 'pageview');
+    
+    </script>
+
+
+
+
+      </body>
+    
+<!-- Mirrored from www.mikeinghamdesign.com/contact.php by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 27 Feb 2018 08:42:55 GMT -->
+</html>

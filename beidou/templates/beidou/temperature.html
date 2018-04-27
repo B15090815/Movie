@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>加密传输温度实时数据显示</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <style>
+        .wrapper{
+            width: 100%;
+
+            /* text-align: center; */
+            /* font-size: 28px; */
+        }
+        .inner{
+            width: 50%;
+            margin-left: auto;
+            margin-right:auto; 
+        }
+        .inner a{
+            padding: 6px;
+            background-color: rgb(0, 132, 255);;
+            color: white;
+            font-size: 20px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .inner span{
+            font-size: 22px;
+            line-height: 35px;
+        }
+        .color{
+            /* border: 1px solid brown; */
+            background-color: green;
+            /* border:  */
+            width: 200px;
+            height: 20px;
+            display: inline-block;
+            margin-left:20px; 
+        }
+
+        .fail,.alarm{
+            color: red;
+        }
+        .success{
+            color: green;
+        }
+
+        .normal{
+            color: green;
+        }
+        .medium{
+            color: orange;
+        }
+        /* .alarm{
+            color: red;
+        } */
+    </style>
+
+    <script>
+
+        
+ 
+            function GetData(){
+                $.ajax({
+                    url:"/getdata/",
+                    type:"get",
+                    success:function(response){
+                        $("#digest").html(response[1]);
+                        $("#dstatus").html(response[0]);
+                        var temp = response.split(/\s+/);
+                        var t,s,a;
+                        for(var i=0;i< temp.length;i++){
+                            t = "#t" + (i+1);
+                            s = "#status" + (i+1);
+                            a = parseInt(temp[i]);
+                            $(t).html(a);
+                            if(a <= 30){
+                                // $(t).html(a);
+                                $(s).html("<b>"+ "正常" +"</b>");
+                                // $(s).attr("class","");
+                            }else if(30<a<=40){
+                                
+                                $(s).html("<b>" + "预警" + "</b>");
+                                $(s).attr("class", "medium");
+                            }else if(a>40){
+                                $(s).html("<b>" + "警报" + "</b>");
+                                $(s).attr("class", "alarm");
+                                alert("当前温度过高！");
+                            }
+                            
+                        }
+                        console.log(response);
+                    },
+                    error:function(xhr,msg,ex){
+                        if(msg != null){
+                            alert(msg);
+                        }
+                        // alert("本次请求失败，请检查网络！");
+                    }
+                });
+                // i++;
+                // console.log(i);
+                window.getdata = setTimeout(GetData, 5000)
+            }
+
+            function stopGet(node) {
+                clearTimeout(window.getdata)
+                node.innerHTML = "已经停止请求数据";
+            }
+            // GetData();
+            // alert("OKK");
+
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div style="margin-top:40px;"></div>
+        <div class="inner">
+            <a href="javascript:void(0)" onclick="GetData()">点击开始请求数据</a>
+            <a href="javascript:void(0)" onclick="stopGet(this)">点击停止请求数据</a>
+        </div>
+        <div class="inner">
+            <h2>本次通信验证信息及状态</h2>
+            <span>摘要:&nbsp;&nbsp;<span id="digest">无数据</span></span>
+            <br>
+            <span>验证签名:&nbsp;&nbsp;
+                <span class="normal" id="dstatus">
+                    <b>无数据</b>
+                </span>
+            </span>
+        </div>
+        <div class="inner">
+            <h2>传感器1</h2>
+            <span>温度:&nbsp;&nbsp;<span id="t1">无数据</span>&#176;C</span><br>
+            <span>状态:&nbsp;&nbsp;<span class="normal" id="status1"><b>无数据</b></span></span> <!-- <div class="color"></div> -->
+        </div>
+
+        <div class="inner">
+            <h2>传感器2</h2>
+            <span>温度:&nbsp;&nbsp;
+                <span id="t2">无数据</span>&#176;C</span>
+            <br>
+            <span>状态:&nbsp;&nbsp;
+                <span class="normal" id="status2">
+                    <b>无数据</b>
+                </span>
+            </span>
+        </div>
+        <div class="inner">
+            <h2>传感器3</h2>
+            <span>温度:&nbsp;&nbsp;
+                <span id="t3">无数据</span>&#176;C</span>
+            <br>
+            <span>状态:&nbsp;&nbsp;
+                <span class="normal" id="status3">
+                    <b>无数据</b>
+                </span>
+            </span>
+        </div>
+
+        <div class="inner">
+            <h2>传感器4</h2>
+            <span>温度:&nbsp;&nbsp;
+                <span id="t4">无数据</span>&#176;C</span>
+            <br>
+            <span>状态:&nbsp;&nbsp;
+                <span class="normal" id="status4">
+                    <b>无数据</b>
+                </span>
+            </span>
+        </div>
+
+        <div class="inner">
+            <h2>传感器5</h2>
+            <span>温度:&nbsp;&nbsp;
+                <span id="t5">无数据</span>&#176;C</span>
+            <br>
+            <span>状态:&nbsp;&nbsp;
+                <span class="normal" id="status5">
+                    <b>无数据</b>
+                </span>
+            </span>
+        </div>
+
+    </div>
+</body>
+
+<!-- <div class="inner">
+    <h2>本次通信验证信息及状态</h2>
+    <span>摘要:&nbsp;&nbsp;nvde{lwehzlkqbxfxdyrncezxu{{vgmuyqqufaqzphavnxwryyifpkjjmjyqvmbqczzvkgkm</span>
+    <br>
+    <span>验证签名:&nbsp;&nbsp;
+        <span class="normal">
+            <b>成功</b>
+        </span>
+    </span>
+</div> -->
+
+</html>

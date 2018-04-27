@@ -1,0 +1,165 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-hans">
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>北斗</title>
+      <!-- <link href='http://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900,300' rel='stylesheet' type='text/css'> -->
+      <!-- <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'> -->
+      <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/flexslider.css' %}" rel="stylesheet" >
+      <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+      <!-- <link href="{% static 'css/queries.css' %}" rel="stylesheet"> -->
+      <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+      
+<style>
+
+  .log{
+    /* text-align: center; */
+    /* margin:0 auto; */
+    /* padding-left:35%; */
+    /* border: 1px solid white; */
+    margin-top:18%; 
+    color: white;
+    opacity: 0.9;
+  }
+  h3{
+    margin-left:30px; 
+    font-size: 1.6em;
+  }
+
+  .log a{
+    color: white;
+    margin-right: 20px;
+    font-size: 1.2em;
+  }
+
+  .in input{
+    outline: none;
+    border: none;
+    border-bottom:2px solid rgb(245, 229, 229); 
+    background-color: transparent;
+    width: 250px;
+    transition: width 1s;
+    font-size:1.5em; 
+    opacity: 0.8;
+  }
+  .in input:focus{
+    /* width: 320px; */
+    border-bottom:2px solid white;
+    opacity: 1;
+  }
+  ::-webkit-input-placeholder{
+    font-size: 18px;
+    padding-left: 10px;
+    color: white;
+    opacity: 0.8;
+  }
+
+  .login{
+    margin-top:10px; 
+    /* margin-left: 30px; */
+    /* text-align: center; */
+  }
+  input[type="submit"]{
+    border: none;
+    padding: 5px;
+    margin: 0;
+    color: white;
+    font-size: 1.4em;
+    background-color: #0084ff;
+    width: 250px;
+    border-radius: 20px;
+    height: 40px;
+  }
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: black;
+  }
+
+  .logfooter{
+    margin-top:14px;
+  }
+  #headbar a{
+    font-size: 1.3em;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+</style>
+
+  </head>
+  <body id="top" class="hero">
+        <header id="home">
+        </header>
+        <section class="" id="">
+          <div class="container">
+            {% if not user.is_authenticated %}
+              <div class="row">
+                <div class="log animated fadeInUp delay-05s">
+                  <h3>北斗安全管理登录</h3>
+                  <form action="{%url 'login'%}" method="post">
+                    {% csrf_token%}
+                    <div class="username in">
+                      <input type="text" autocomplete="off" placeholder="用户名" name="username">
+                    </div>
+                    <div class="passwd in">
+                      <input type="password" autocomplete="off" placeholder="密码" name="password">
+                    </div>
+                    <div class="login">
+                      <input type="submit" value="登录">
+                    </div>
+                    <div class="logfooter">
+                      <a href="">忘记密码</a>
+                      <a href="{%url 'toregister'%}">注册</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <div class="row">
+                  <div class="col-md-12 text-right navicon" id="headbar">
+                    <a href="javascript:void(0)">欢迎你,{{user.username}}</a>
+                    <a href="{%url 'logout'%}">注销</a>
+                    <a href="{%url 'toaddmember'%}">添加监测人员</a>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-8 col-md-offset-2 text-center inner">
+                    <h1 class="white">监测成员信息网站</h1>
+                    <h2 class="animated fadeInUp delay-05s white">信息预览</h2>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-md-offset-3 text-center animated fadeInUp delay-15s">
+                    <a href="/contact/" class="learn-more-btn">成员列表</a>
+                  </div>
+                </div>
+            {% endif %}
+          </div>
+        </section>
+        
+        
+        <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    	  <script type="text/javascript" src="{% static 'js/jquery.jigowatt.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/jquery.flexslider.js' %}"></script>
+        <script src="{% static 'js/modernizr.js' %}"></script>
+        
+		<script>
+		  // (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  // (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  // })(window,document,'script',"{% static 'google-analyticator/external-tracking.min109c.js' %}",'ga');
+		
+		  // ga('create', 'UA-42899893-1', 'mikeinghamdesign.com');
+		  // ga('send', 'pageview');
+		</script>
+
+  </body>
+    
+</html>
