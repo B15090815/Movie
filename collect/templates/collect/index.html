@@ -1,0 +1,309 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-hans">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>B150403班实验报告收集</title>
+    <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/animate.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/drag.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.form.js' %}"></script>
+    <script src="{% static 'js/drag.js' %}"></script>
+    <style>
+      /* .hero {
+        background: url("{% static 'image/heroshot.jpg' %}") no-repeat center center; 
+        -webkit-background-size: cover; 
+        -moz-background-size: cover; 
+        -o-background-size: cover;
+        background-size: cover; 
+        padding: 25px 0 400px 0; 
+        height: auto; 
+        } */
+
+      .log{
+        margin-top:18%; 
+        color: rgb(14, 13, 13);
+        /* opacity: 0.9; */
+      }
+      h3{
+        margin-left:30px; 
+        font-size: 1.6em;
+      }
+
+      .log a{
+        color: rgb(8, 8, 8);
+        margin-right: 20px;
+        font-size: 1.2em;
+      }
+
+      .in input{
+        outline: none;
+        border: none;
+        border-bottom:2px solid rgb(8, 8, 8); 
+        background-color: transparent;
+        width: 250px;
+        transition: width 1s;
+        font-size:1.5em; 
+        opacity: 0.8;
+      }
+      .in input:focus{
+        border-bottom:2px solid rgb(8, 8, 8);
+        opacity: 1;
+      }
+      ::-webkit-input-placeholder{
+        font-size: 18px;
+        padding-left: 10px;
+        color: rgb(15, 15, 15);
+        opacity: 0.8;
+      }
+
+      .login{
+        margin-top:10px; 
+      }
+      input[type="submit"]{
+        border: none;
+        padding: 5px;
+        margin: 0;
+        color: white;
+        font-size: 1.4em;
+        background-color: #0084ff;
+        width: 250px;
+        border-radius: 20px;
+        height: 40px;
+      }
+
+      input:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0px 1000px white inset;
+          -webkit-text-fill-color: black;
+        }
+
+      .logfooter{
+        margin-top:14px;
+      }
+
+      #headbar{
+        margin-top:10px; 
+      }
+
+      #headbar a{
+        font-size: 1.4em;
+        margin-right: 20px;
+        font-weight: bold;
+      }
+
+      th{
+        text-align: center;
+      }
+
+      #processbar{
+        margin-top: 30px;
+      }
+    </style>
+
+
+
+<script>
+
+  window.verify = false;
+  // 异步上传提问问题的js
+  $(document).ready(function () {
+    var percent = $("#percent");
+    var options = {
+      beforeSubmit: function () {     // pre-submit callback  
+        if(window.verify){
+          percent.css("width", "0%");
+          $("#processbar").show();
+        }else{
+          alert("验证失败!");
+          return false;
+        }
+      },
+      success: function (data, statusText) {     // post-submit callback  
+        if(data != "1"){
+          percent.removeClass("progress-bar-success");
+          percent.addClass("progress-bar-danger");
+        }
+        percent.css("width", "100%");
+        window.verify = false;
+        // progress-bar-danger
+      },
+      uploadProgress: function (event, position, total, percentComplete) {
+        var percentVal = percentComplete + '%';
+        percent.css("width", "percentVal");
+      },
+      dataType: "json",
+      complete: function () {
+        $("#processid").removeClass("active");
+      },
+      error:function(){
+
+      },
+      // other available options:   
+      //url:       url         // override for form's 'action' attribute   
+      //type:      type        // 'get' or 'post', override for form's 'method' attribute   
+      //dataType:  null        // 'xml', 'script', or 'json' (expected server response type)   
+      // clearForm: true        // clear all form fields after successful submit   
+      resetForm: true        // reset the form after successful submit   
+      // $.ajax options can be used here too, for example:   
+      //timeout:   3000   
+    };
+
+    // bind form using 'ajaxForm'   
+    $('#submitrecord').ajaxForm(options).submit(function () {
+      return false; // return false表示不跳转页面
+    });
+  });   
+</script>
+
+
+<script>
+
+  function isIE() {
+      return (document.all && window.ActiveXObject && !window.opera) ? true : false;
+    }
+  function filechecknChange(target) {
+      var fileSize = 0;
+      if (isIE() && !target.files) {
+        var filePath = target.value;
+        var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+        var file = fileSystem.GetFile(filePath);
+        fileSize = file.Size;
+      } else {
+        fileSize = target.files[0].size;
+      }
+      var size = fileSize / (1024* 1024);
+      if (size > 10) {
+        alert("附件不能大于10M");
+        target.value = "";
+        return
+      }
+      var name = target.value;
+      var fileName = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
+      if (fileName != "doc" && fileName != "docx") {
+        alert("文件格式不对（只支持doc、docx）");
+        target.value = "";
+        return
+      }
+    }
+</script>
+
+
+  </head>
+  <body id="top" class="">
+    <section>
+      <div class="container">
+        {% if not user.is_authenticated %}
+          <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-sm-12">
+              <div class="log">
+                {% if change_passwd %}
+                  <h3>请用新密码登录</h3>
+                {% else %}
+                  <h3>用户登录</h3>
+                {% endif %}
+                <form action="{% url 'login' %}" method="post">
+                  {% csrf_token%}
+                  <div class="username in">
+                    <input type="text" autocomplete="off" placeholder="用户名" name="username" required>
+                  </div>
+                  <div class="passwd in">
+                    <input type="password" autocomplete="off" placeholder="密码" name="password" required>
+                  </div>
+                  <div class="login">
+                    <input type="submit" value="登录">
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <div class="row">
+            <div class="col-md-12 text-right navicon" id="headbar">
+              <a href="javascript:void(0)">欢迎你,{{user.username}}</a>
+              <a href="{% url 'logout' %}">注销</a>
+              <a href="{% url 'to_change_passwd' %}">修改密码</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-sm-12">
+              <div class="text-center">
+                <h1 class="white">实验报告提交</h1>
+              </div>
+              <form action="{% url 'subrecord' %}" id="submitrecord" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                <div style="font-size:1.3em">
+                  {% for e in exptemplate %}
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="exp"  value="{{e.name}}" required>{{e.name}}
+                    </label>
+                  </div>
+                  {% empty %}
+                  <h3>还没有实验要交!</h3>
+                  {% endfor %}
+                </div>
+                <div style="font-size:1.3em;margin-top:20px">
+                  <strong>请选择需要上交的文件</strong>
+                  <input type="file" name="record" required onchange="filechecknChange(this)">
+                </div>
+
+                <div id="drag" style="margin:20px 0px auto;"></div>
+                <span><em>如需再提交，请刷新</em></span>
+                <div style="margin:20px auto;">
+                  <input type="submit" value="提交">
+                </div>
+
+                <div id="processbar" style="display:none">
+                  <div class="progress progress-striped active" id="processid">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="10" aria-valuemax="100" style="width:0%;"
+                      id="percent">
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+          <div style="margin:20px auto"></div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center animated fadeInUp delay-15s col-sm-12">
+              <h1 class="white">已提交的实验报告</h1>
+              {% if exp %}
+                <table class="table" style="font-size:1.3em">
+                  <thead>
+                    <tr>
+                      <th>实验名称</th>
+                      <th>提交日期</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for e in exp  %}
+                      <tr class="warning">
+                        <td>{{e.expname}}</td>
+                        <td>{{e.submitdate}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+              <h2>目前还没有提交过任何报告!</h2>
+              {% endif %}
+              
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+     
+<script type="text/javascript">
+  $('#drag').drag();
+</script>
+  </body>
+    
+</html>

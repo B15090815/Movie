@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from wechat.views import wechat
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('movie.urls')),
+    url(r'^', include('collect.urls')),
+    # url(r'^', include('movie.urls')),
     url(r'^vip/', include('vip.urls')),
     url(r'^wexin$', wechat),
+    # url(r'^',include('onlineFaq.urls')),
+
 ]
